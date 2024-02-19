@@ -49,7 +49,9 @@ const ProfilePage = async () => {
 
   return (
     <div className='container mx-auto p-4'>
-      <div>{ ["hello", "bye", ] }</div>
+      {/* jsxの中で配列は式なので返されて展開される */}
+      {/* <div>{ ["hello", "bye", ] }</div> */}
+
       <div className="text-xl font-bold mb-4">プロフィール</div>
       <div className="bg-white shadow-md rounded p-4">
         <div className="flex items-center">

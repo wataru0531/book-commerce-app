@@ -75,7 +75,7 @@ export default async function Home() {
         contents.map((book: BookType) => {
           // console.log(book); // { id: 1, title: 'Book 1', thumbnail: '/thumbnails/discord-clone-udemy.png', price: 2980,}
 
-          return <Book key={book.id} book={ book } isPurchased={purchaseBookIds.includes(book.id)}/>
+          return <Book key={book.id} book={ book } isPurchased={purchaseBookIds?.includes(book.id)}/>
         })
       }
     </main>

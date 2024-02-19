@@ -1,4 +1,7 @@
 
+// ルートのpage.tsx
+
+import { Suspense } from 'react'
 import type { Metadata } from 'next'
 import { Noto_Sans_JP, Poppins } from 'next/font/google'
 import { SessionProvider } from "next-auth/react"
@@ -6,6 +9,8 @@ import { SessionProvider } from "next-auth/react"
 import './globals.css'
 import { Header } from './components/Header'
 import { NextAuthProvider } from './lib/next-auth/provider'
+// import Spinner from './components/Spinner'
+import Loading from './loading'
 
 
 // フォントは別フォルダを作ってもいい。utils/font
@@ -43,7 +48,15 @@ export default function RootLayout({
       <body className={`${notoJP.className} ${notoJP.variable} ${poppins.variable} `}>
         <NextAuthProvider>
           <Header />
-          {children}
+          {/* 
+            Suspense 
+            同階層のloading.tsxが発火
+            fallback ... データの取得やロード中に非同期的な処理の最中に一時的なuiを噛ませるなどの意味を持つ
+            fallbackにはloading.tsxが発火する
+          */}
+          <Suspense fallback={ <Loading /> }>
+            {children}
+          </Suspense>
         </NextAuthProvider>
       </body>
     </html>

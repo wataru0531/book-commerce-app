@@ -41,18 +41,24 @@ export const Header: React.FC = async () => {
           </Link>
 
           <Link
-            href={ user ? "/profile" : "/login" }
+            // href={ user ? "/profile" : "/login" }
+            // NextAuthのapiでsignInページがデフォルトで用意されている。
+            // ログインにしろ、ログアウトにしろ、vercelにデプロイする場合はこの書き方が都合がいい。
+            href={ user ? "/profile" : "/api/auth/signin" }
             className="px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:text-white"
           >
             { user ? "プロフィール" : "ログイン" }
           </Link>
 
-          <button 
+          <Link
+            // onClickはクライアントコンポーネントでしか使えない
+            // → Linkタグ + NextAuthでログインページがデフォルトで用意されている
+            href={"/api/auth/signout"}
             className='px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:text-white'
             // onClick={() => signOut({ callbackUrl: "/login" })}
           >
             ログアウト
-          </button>
+          </Link>
 
           {/* ログインしている場合は場合は、ログアウトを表示 */}
           {/* { user ? (<button 
