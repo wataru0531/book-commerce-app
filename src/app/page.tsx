@@ -68,7 +68,7 @@ export default async function Home() {
 
   return (
     <main className="flex flex-wrap justify-center items-center mt-20 md:mt-20">
-      <h2 className="text-center w-full font-bold text-3xl mb-2">
+      <h2 className="font-poppins text-center w-full font-bold text-3xl mb-2">
         Book Commerce
       </h2>
       {

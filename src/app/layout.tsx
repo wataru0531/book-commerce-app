@@ -3,7 +3,6 @@
 
 import { Suspense } from 'react'
 import type { Metadata } from 'next'
-import { Noto_Sans_JP, Poppins } from 'next/font/google'
 import { SessionProvider } from "next-auth/react"
 
 import './globals.css'
@@ -11,25 +10,8 @@ import { Header } from './components/Header'
 import { NextAuthProvider } from './lib/next-auth/provider'
 // import Spinner from './components/Spinner'
 import Loading from './loading'
+import { notoJP, poppins } from './fonts/fonts'
 
-
-// フォントは別フォルダを作ってもいい。utils/font
-export const notoJP = Noto_Sans_JP({
-  weight: ['400', '700'],
-  subsets: ['latin'], // 文字セット。latinがページを高速化にはいいらしい。他にASCII、ISO-8859-1(Latin-1)など
-  display: "swap",    
-  // フォントの表示方法。
-  // swap...フォントがダウンロードされて表示される前に、代替テキストで置き換える。UXの向上が見込める。
-  // 他に auto、block、fallback、
-  variable: "--font-notojp", // tailwindで使用。使う時は、font-notojp
-})
-
-export const poppins = Poppins({ 
-  weight: ['400', '700'],
-  subsets: ['latin'],
-  display: "swap", 
-  variable: "--font-poppins", 
-})
 
 export const metadata: Metadata = {
   title: 'Book Commerce',
@@ -44,8 +26,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ja">
-      {/* 基本はnotoJPを使い、英語の部分は各ファイルでpoppinsで上書き。 */}
-      <body className={`${notoJP.className} ${notoJP.variable} ${poppins.variable} `}>
+      {/* 
+        ここでは基本はnotoJPを使い、英語の部分は各ファイルでpoppinsで上書きする形でフォントを当てる
+        className ... 全体に当たる
+        variable  ... tailwind.config.tsで設定したエイリアスでタグに直接あてる
+                      例 <h1 className="font-poppins">Book Commerce</h1>
+      */}
+      <body className={`${notoJP.className} ${poppins.variable}`}>
         <NextAuthProvider>
           <Header />
           {/* 

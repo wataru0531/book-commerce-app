@@ -2,6 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
+/* body {
+  font-family: var(--font-poppins);
+} */
+
+/* a {
+  font-family: var(--font-notojp);
+} */
+
+
 /* :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
