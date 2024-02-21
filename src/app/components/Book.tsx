@@ -19,7 +19,7 @@ type BookPropsType = {
 // BookPropsType = { { id: number, createdAt: string } }
 export const Book: React.FC<BookPropsType> = ({ book, isPurchased }) =>{
   // console.log(book) // { id: 'drwmer7ize0d', createdAt: '2024-01-26T15:03:06.118Z', updatedAt: '2024-01-26T15:03:45.898Z', publishedAt: '2024-01-26T15:03:06.118Z', revisedAt: '2024-01-26T15:03:45.898Z', … }
-  console.log(isPurchased)
+  // console.log(isPurchased)
 
   const router = useRouter();
   const [ showModal, setShowModal ] = useState(false);
