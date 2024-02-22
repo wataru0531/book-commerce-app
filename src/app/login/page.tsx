@@ -3,6 +3,9 @@
 Login Page
 NextAuth使用 https://next-auth.js.org/
 
+参考url
+https://medium.com/@kirankumal714/next-js-13-and-nextauth-js-a-power-duo-for-modern-web-development-35854699f43e
+
 ・参照ファイルなど
 prisma/schema.prisma
 api/auth/[...nextauth]/routes.tsx
@@ -14,22 +17,21 @@ lib/next-auth/options.tsx
 'use client'
 
 import { useState, useEffect } from 'react'
-import { getProviders, signIn } from 'next-auth/react'
+import { ClientSafeProvider, getProviders, signIn } from 'next-auth/react'
 
-// import { ProviderPage } from './components/ProviderPage'
+// 下記の型はClientSafeProviderが持っている
+// type ProviderType = {
+//   id: string
+//   name: string
+//   type: string
+//   signinUrl: string
+//   callbackUrl: string
+// }
 
-// { id: 'github', name: 'GitHub', type: 'oauth', signinUrl: 'http://localhost:3000/api/auth/signin/github', callbackUrl: 'http://localhost:3000/api/auth/callback/github'}
-
-type ProviderType = {
-  id: string
-  name: string
-  type: string
-  signinUrl: string
-  callbackUrl: string
-}
 
 const Login = () => {
-  const [ providerData, setProviderData ] = useState<any>(null)
+  // Record型　キーと値の型を指定して、、その組み合わせでオブジェクトの型を表現する。
+  const [ providerData, setProviderData ] = useState<Record<string, ClientSafeProvider> | null>(null)
 
   // クライアントコンポーネントではasync/awaitは使えないのでuseEffectやReactQuery、SWRを使う
   useEffect(() => {
@@ -49,7 +51,7 @@ const Login = () => {
     fetchProviders()
   }, [])
   
-  // console.log(providerData)
+  console.log(providerData)
 
   return(
     <div className="flex items-center justify-center py-16 px-4 sm:px-6 lg:px-8">
@@ -66,11 +68,11 @@ const Login = () => {
             // Object.values(providerData).map(provider => {
               //  console.log(provider) // { id: 'github', name: 'GitHub', type: 'oauth', signinUrl: 'http://localhost:3000/api/auth/signin/github', callbackUrl: 'http://localhost:3000/api/auth/callback/github'}
             Object.keys(providerData).map((key) => {
-              console.log(key)
+              // console.log(key) // github
               // Object.keys() オブジェクトのキーの配列を返す。
 
-              const provider = providerData[key]; // 
-              console.log(provider)
+              const provider = providerData[key]; //　providerData は {github: {…}} なのでgithubのオブジェクトを取得
+              // console.log(provider) // { id: 'github', name: 'GitHub', type: 'oauth', signinUrl: 'http://localhost:3000/api/auth/signin/github', callbackUrl: 'http://localhost:3000/api/auth/callback/github'}
 
               return(
                 <div key={provider.id} className="text-center">
