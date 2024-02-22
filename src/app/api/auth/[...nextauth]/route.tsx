@@ -4,6 +4,7 @@
 
 // [...nextauth] > route.tsx これを書くことでgetProvidersが使える
 
+
 // ハンドラー
 // 特定のイベントや、リクエストに対して処理を行うためのコードや機能のこと
 // このNextAuthは、認証機能の一部を処理するハンドラーを提供し 、
@@ -21,5 +22,3 @@ const handler = NextAuth(nextAuthOptions);
 // これを他のファイルからインポートすると、GETまたはPOSTメソッドとしてhandlerを
 // 使用できるようになる
 export { handler as GET, handler as POST }
-
-

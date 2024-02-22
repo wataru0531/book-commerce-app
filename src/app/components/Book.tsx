@@ -75,7 +75,8 @@ export const Book: React.FC<BookPropsType> = ({ book, isPurchased }) =>{
   const handlePurchaseConfirm = () => { // 購入
     if(!user){ // ユーザーがログインしていないとき
       setShowModal(false);
-      router.push("/login/");
+      
+      router.push("/api/auth/signin");
     } else {
       // ユーザーがログインしている場合 Stripeで決済
       startCheckout();

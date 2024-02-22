@@ -48,9 +48,9 @@ export async function POST(request: Request, response: Response){
       // 支払いに成功した場合の遷移先url
       // 初回購入成功時のみセッションidを付加する。stripe側が自動的に設定してくれる
       // この末尾のsession_idを使って遷移先ページでidに見合ったデータを取得していく
-      success_url: `http://localhost:3000/book/checkout-success?session_id={CHECKOUT_SESSION_ID}`,
+      success_url: `${process.env.NEXT_PUBLIC_BASE_URL}/book/checkout-success?session_id={CHECKOUT_SESSION_ID}`,
       // キャンセルした場合の処理
-      cancel_url: "http://localhost:3000"
+      cancel_url: `${process.env.NEXT_PUBLIC_URL}`,
     })
     // console.log(session) // { id: 'cs_test_a1ar...', object: 'checkout.session', after_expiration: null, ... }
 
