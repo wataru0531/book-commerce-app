@@ -36,8 +36,13 @@ export const client = createClient({
 export const getAllBooks = async () => {
   const allBooks = await client.getList<BookType>({
     endpoint: "bookcommerce", // サービス名
-    customRequestInit: {
-      cache: "no-store", // SSR。キャッシュを利用せずに常に新しいデータを取得できる
+    customRequestInit: { // ここで読み込み方を設定可能になっている
+      // cache: "no-store", // SSR。キャッシュを利用せずに常に新しいデータを取得できる
+      
+      // ISRに設定。記事の追加はそこまで頻繁ではないので。最初の表示読み込み毒度を上げていく
+      next: {
+        revalidate: 3600, // 1時間
+      }
     }
   })
 
@@ -50,7 +55,7 @@ export const getDetailBook = async (contentId: string) => {
     endpoint: "bookcommerce",
     contentId,
     customRequestInit: {
-      cache: "no-store",
+      cache: "no-store", // 購入した直後で即表示させたいのでSSR
     }
   })
   // console.log(detailBook)
