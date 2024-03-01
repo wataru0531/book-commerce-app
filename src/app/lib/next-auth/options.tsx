@@ -31,20 +31,27 @@ export const nextAuthOptions: NextAuthOptions = {
   // 認証すると同時に、Prismaの中のモデルのユーザに保存されていく
   adapter: PrismaAdapter(prisma),
 
-  // 認証フローのさまざまな部分にフックできる
+  // callbacks ... 認証フローのさまざまな部分にフックできる
   // フロント側に値を渡すには、sessionとコールバックの組み合わせを使う
   // next-authのセッションだったり、ユーザー情報を返す
   callbacks: {
+    // sessionコールバック
+    // ユーザーのセッションが更新されるたびに発火する
+    // sessionオブジェクト: ユーザーのセッション情報。 
+    // userオブジェクト:    ユーザーの情報
+    // sessionオブジェクト、 ユーザーのidを組み合わせて新しいセッションオブジェクトを作成して返している
     session: ({ session, user }) => {
+      // console.log(session) // { user: { name: 'watarucode', email: 'obito0531@gmail.com', image: 'https://avatars.githubusercontent.com/u/80320746?v=4'}, expires: '2024-03-31T13:25:54.133Z'}
+
       return {
         ...session,
-        user: {
+        user: { // getServerSession(nextAuthOptions)で、このuserオブジェクトが返される
           ...session.user,
           id: user.id,
         },
       };
     },
   },
-  secret: process.env.NEXTAUTH_SECRET,
 
+  secret: process.env.NEXTAUTH_SECRET,
 }

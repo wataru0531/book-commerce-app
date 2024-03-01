@@ -17,7 +17,7 @@ export default async function Home() {
   const session = await getServerSession(nextAuthOptions)
   // console.log(session) // { user: { name: 'watarucode', email: 'obito0531@gmail.com', image: 'https://avatars.githubusercontent.com/u/80320746?v=4', id: 'clrtcl8km000097cmjegw08xy'} }
   
-  // as User ... キャスト。ユーザーが存在する時だけユーザの方を付けることができる
+  // as User ... キャスト。ユーザーが存在する時だけユーザの型を付けることができる
   const user: User = session?.user as User;
   // console.log(user)
 

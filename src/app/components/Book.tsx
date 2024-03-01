@@ -47,9 +47,9 @@ export const Book: React.FC<BookPropsType> = ({ book, isPurchased }) =>{
       // api/checkout/route.tsxのPOSTが発火
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/checkout`, {
         method: "POST",
-        headers: {"Content-Type": "application/json"},
+        headers: { "Content-Type": "application/json" },
         // json文字列に変換。fetchがオブジェクトを送信できないから。
-        // サーバー側のapiが欲しい形に変換する。他にFormDataオブジェクトを使う時もある
+        // サーバー側のapiが欲しい形に変換。他にFormDataオブジェクトを使う時もある
         body: JSON.stringify({ 
           title: book.title,
           price: book.price,

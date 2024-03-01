@@ -1,9 +1,10 @@
 
 // microCMSのAPI
+// 参考　https://blog.microcms.io/microcms-js-sdk-2_5_0/
 
 // このクライアントは、特定のデータベースや外部サービスとのやり取りを抽象化し、
-// アプリケーションが簡単にデータを取得を可能とする
-// 抽象化 apiや関数などを自前で用意せずにmicroCMS社側で用意してもらっている状況
+// アプリケーションが簡単にデータを取得することを可能とする
+// 抽象化 ... apiや関数などを自前で用意せずにmicroCMS社側で用意してもらっている状況
 
 import { BookType } from '@/app/types/type';
 import { createClient } from 'microcms-js-sdk';
@@ -35,6 +36,9 @@ export const client = createClient({
 export const getAllBooks = async () => {
   const allBooks = await client.getList<BookType>({
     endpoint: "bookcommerce", // サービス名
+    customRequestInit: {
+      cache: "no-store", // SSR。キャッシュを利用せずに常に新しいデータを取得できる
+    }
   })
 
   return allBooks;
@@ -45,6 +49,9 @@ export const getDetailBook = async (contentId: string) => {
   const detailBook = await client.getListDetail<BookType>({
     endpoint: "bookcommerce",
     contentId,
+    customRequestInit: {
+      cache: "no-store",
+    }
   })
   // console.log(detailBook)
 
