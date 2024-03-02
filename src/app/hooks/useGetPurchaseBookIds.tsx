@@ -1,38 +1,37 @@
 
 
 // 購入した本のidの配列を返すフックス
-"use client"
-
-import { useState, useEffect } from "react";
 
 import { PurchaseBookType, User } from "../types/type";
 
 
-export const useGetPurchaseBookIds = (user: User) => {
-  // 購入した本のidの配列を格納
-  const [ bookIds, setBookIds ] = useState<string[]>([])
+const useGetPurchaseBookIds = async (user: User) => {
+  // console.log(user)
+  try{
+    let purchaseBookIds: any = [];
 
-  useEffect(() => {
-    const getIds = async () => {
-      if(user){
-        // 購入履歴を確認するAPI
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/purchases/${user?.id}`)
-        // console.log(response)
-        const purchasesData: PurchaseBookType[] = await response.json();
-        // console.log(purchasesData);
-        // [{ id: 'cls3aw7vd0007103zpiqxotbd', userId: 'clrtcl8km000097cmjegw08xy', bookId: 'drwmer7ize0d', createdAt: '2024-02-01T14:17:29.305Z'}, {...}, {...} ]
+    if(user){
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/purchases/${user?.id}`,
+        { cache: "no-store" } // SSR(デフォルト)。今回は購入履歴の調査になるので静的ビルドの時にデータとして受け取ることはない
+      )
       
-        // idの配列を取得する
-        const purchaseBookIds: string[] = purchasesData.map((purchaseBook: PurchaseBookType) => purchaseBook.bookId);
-        // console.log(purchaseBookIds) // [ 'cls3aw7vd0007103zpiqxotbd', 'cls3az2ml0009103z1p1ltr1s', 'cls4qfhk20001dp3hie1ilts1']
-      
-        setBookIds(purchaseBookIds)
-      }
+      const purchasesData: PurchaseBookType[] = await response.json();
+      // console.log(purchasesData);
+      // [{ id: 'cls3aw7vd0007103zpiqxotbd', userId: 'clrtcl8km000097cmjegw08xy', bookId: 'drwmer7ize0d', createdAt: '2024-02-01T14:17:29.305Z'}, {...}, {...} ]
+
+      purchaseBookIds = purchasesData.map((purchaseBook: PurchaseBookType) => purchaseBook.bookId);
+      // console.log(purchaseBookIds) // [ 'cls3aw7vd0007103zpiqxotbd', 'cls3az2ml0009103z1p1ltr1s', 'cls4qfhk20001dp3hie1ilts1']
     }
-
-    getIds();
     
-  }, [user]); // userが変更されたら再度APIを呼び出す
+    return purchaseBookIds;
+    // console.log(purchaseBookIds) // [ 'drwmer7ize0d', 'agbc2xsqay4', 'h9o6plktch3' ]
+  } catch(error){
+    // console.error("Error fetching purchase book ids", error);
 
-  return bookIds;
+    throw new Error("Error fetching purchase book ids")
+  }
+  
 }
+
+export default useGetPurchaseBookIds;

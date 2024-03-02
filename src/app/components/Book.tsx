@@ -2,33 +2,26 @@
 
 import { useState } from 'react';
 import { useRouter } from "next/navigation"
-import { useSession } from 'next-auth/react';
 import Image from 'next/image'
-// import Link from 'next/link'
 
-import { BookType } from '../types/type';
+import { BookType, User } from '../types/type';
 
 type BookPropsType = {
   book: BookType
   isPurchased: boolean
+  user?: User
 }
 
 // book ... { id: ..., title: ..., thumbnail: ... } のオブジェクト
 // 型を引数に合わせる
 // BookType = { id: number, createdAt: string }
 // BookPropsType = { { id: number, createdAt: string } }
-export const Book: React.FC<BookPropsType> = ({ book, isPurchased }) =>{
+export const Book: React.FC<BookPropsType> = ({ book, isPurchased, user }) =>{
   // console.log(book) // { id: 'drwmer7ize0d', createdAt: '2024-01-26T15:03:06.118Z', updatedAt: '2024-01-26T15:03:45.898Z', publishedAt: '2024-01-26T15:03:06.118Z', revisedAt: '2024-01-26T15:03:45.898Z', … }
   // console.log(isPurchased)
 
   const router = useRouter();
   const [ showModal, setShowModal ] = useState(false);
-
-  // セッション情報を取り出す
-  const { data: session } = useSession()
-  // console.log(session)
-  const user: any = session?.user;
-  // console.log(user) // {name: 'watarucode', email: 'obito0531@gmail.com', image: 'https://avatars.githubusercontent.com/u/80320746?v=4', id: 'clrtcl8km000097cmjegw08xy'}
 
   // カードクリック
   const handlePurchaseClick = () => {
@@ -62,7 +55,7 @@ export const Book: React.FC<BookPropsType> = ({ book, isPurchased }) =>{
 
       // apiのreturnから遷移先のurlを受け取る
       const responseData = await response.json()
-      console.log(responseData) // {checkout_url: 'https://checkout.stripe.com/c/pay/cs_test_a14WlwKV…WBabHFgaCcpJ2BrZGdpYFVpZGZgbWppYWB3dic%2FcXdwYHgl'}
+      // console.log(responseData) // {checkout_url: 'https://checkout.stripe.com/c/pay/cs_test_a14WlwKV…WBabHFgaCcpJ2BrZGdpYFVpZGZgbWppYWB3dic%2FcXdwYHgl'}
 
       if(responseData) router.push(responseData.checkout_url)
 

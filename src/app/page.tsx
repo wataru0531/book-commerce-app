@@ -1,7 +1,5 @@
 // ルートpage
 
-// "use client"
-
 import { getServerSession } from 'next-auth';
 import { Suspense, useEffect } from 'react';
 
@@ -9,7 +7,7 @@ import { getAllBooks } from './lib/microcms/client';
 import { BookType, PurchaseBookType, User } from './types/type';
 import { Book } from './components/Book';
 import { nextAuthOptions } from './lib/next-auth/options';
-import { useGetPurchaseBookIds } from './hooks/useGetPurchaseBookIds';
+import useGetPurchaseBookIds from './hooks/useGetPurchaseBookIds';
 
 
 export default async function Home() {
@@ -21,7 +19,7 @@ export default async function Home() {
   const user: User = session?.user as User;
   // console.log(user)
 
-  const { contents } = await getAllBooks();
+  const { contents } = await getAllBooks(); // ISR
   // console.log(contents); 
   // [
   //   {
@@ -45,26 +43,8 @@ export default async function Home() {
   // const purchaseBookIds = useGetPurchaseBookIds(user);
   // console.log(purchaseBookIds)
 
-  // 購入した本のidの配列を格納
-  let purchaseBookIds: any;
-  
-  // 購入履歴を確認するAPI
-  if(user){
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/purchases/${user?.id}`,
-      { cache: "no-store" } // SSR(デフォルト)。今回は購入履歴の調査になるので静的ビルドの時にデータとして受け取ることはない
-    )
-    // console.log(response)
-    const purchasesData: PurchaseBookType[] = await response.json();
-    // console.log(purchasesData);
-    // [{ id: 'cls3aw7vd0007103zpiqxotbd', userId: 'clrtcl8km000097cmjegw08xy', bookId: 'drwmer7ize0d', createdAt: '2024-02-01T14:17:29.305Z'}, {...}, {...} ]
-  
-    // idの配列を取得する
-    purchaseBookIds = purchasesData.map((purchaseBook: PurchaseBookType) => purchaseBook.bookId);
-    // console.log(purchaseBookIds) // [ 'cls3aw7vd0007103zpiqxotbd', 'cls3az2ml0009103z1p1ltr1s', 'cls4qfhk20001dp3hie1ilts1']
-  }
-
-  // console.log(purchaseBookIds) // [ 'drwmer7ize0d', 'agbc2xsqay4', 'h9o6plktch3' ]
+  // 購入した本のidの配列を取得
+  const purchaseBookIds = await useGetPurchaseBookIds(user);
 
   return (
     <main className="flex flex-wrap justify-center items-center mt-20 md:mt-20">
@@ -72,11 +52,16 @@ export default async function Home() {
         Book Commerce
       </h2>
       {
-        contents.map((book: BookType) => {
+        contents.map((book: BookType) => (
           // console.log(book); // { id: 1, title: 'Book 1', thumbnail: '/thumbnails/discord-clone-udemy.png', price: 2980,}
 
-          return <Book key={book.id} book={ book } isPurchased={purchaseBookIds?.includes(book.id)}/>
-        })
+          <Book 
+            key={ book.id } 
+            book={ book } 
+            isPurchased={purchaseBookIds?.includes(book.id)}
+            user={ user }
+          />
+        ))
       }
     </main>
   )
