@@ -19,6 +19,4 @@ import NextAuth from 'next-auth/next';
 const handler = NextAuth(nextAuthOptions);
 
 // 認証ハンドラーを外部にエクスポート
-// これを他のファイルからインポートすると、GETまたはPOSTメソッドとしてhandlerを
-// 使用できるようになる
 export { handler as GET, handler as POST }
